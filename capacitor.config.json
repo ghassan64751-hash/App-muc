@@ -1,6 +1,6 @@
 {
   "appId": "com.me.audiolib",
   "appName": "مكتبتي الصوتية",
-  "webDir": "www",
+  "webDir": "dist",
   "server": { "androidScheme": "http", "cleartext": true }
 }
