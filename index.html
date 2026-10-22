@@ -75,7 +75,8 @@ import '@jofr/capacitor-media-session';
 import { Capacitor } from '@capacitor/core';
 import { LocalNotifications } from '@capacitor/local-notifications';
 var notifAsked=false;
-function askNotif(){if(notifAsked||!Capacitor.isNativePlatform())return;notifAsked=true;try{LocalNotifications.requestPermissions().catch(function(){})}catch(e){}}
+async function dbg(){try{var p=await LocalNotifications.checkPermissions();var a=Capacitor.isPluginAvailable('MediaSession');document.querySelector('#note').textContent='تشخيص: إضافة التحكم='+(a?'موجودة':'غير موجودة')+' | الإشعارات='+p.display}catch(e){document.querySelector('#note').textContent='تشخيص: '+e.message}}
+function askNotif(){if(notifAsked||!Capacitor.isNativePlatform())return;notifAsked=true;LocalNotifications.requestPermissions().catch(function(){}).then(function(){setTimeout(dbg,500)})}
 
 var db,folders=[],tracks=[],cur='all',queue=[],idx=-1,objUrl=null;
 var $=function(s){return document.querySelector(s)};
