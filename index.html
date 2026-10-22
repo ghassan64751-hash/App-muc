@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مكتبتي الصوتية</title>
+<style>
+:root{--bg:#EDF2F0;--surface:#FFFFFF;--ink:#12302F;--muted:#5E7472;--line:#D3DEDB;--accent:#0F6B66;--on-accent:#FFFFFF;--hot:#D9822B;--danger:#B3382C;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1818;--surface:#152524;--ink:#E4F0EE;--muted:#8FA8A5;--line:#264240;--accent:#4FC2B8;--on-accent:#0D1818;--hot:#F0A24E;--danger:#F08074;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0D1818;--surface:#152524;--ink:#E4F0EE;--muted:#8FA8A5;--line:#264240;--accent:#4FC2B8;--on-accent:#0D1818;--hot:#F0A24E;--danger:#F08074;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,system-ui,sans-serif;line-height:1.6;padding-bottom:190px}
+header{padding:18px 16px 8px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+h1{font-size:22px;margin:0}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{background:var(--accent);color:var(--on-accent);padding:10px 16px;border-radius:12px;font-weight:600}
+.ghost{border:1px solid var(--line);padding:8px 12px;border-radius:12px;background:var(--surface)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:8px 16px}
+.chip{flex:none;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.bar{display:flex;gap:8px;padding:4px 16px 8px;flex-wrap:wrap}
+.list{margin:0;padding:0 16px;list-style:none}
+.row{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 10px;margin-bottom:8px}
+.row.on{border-color:var(--hot);box-shadow:inset 4px 0 0 var(--hot)}
+.play{flex:none;width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:16px}
+.info{flex:1;min-width:0;text-align:right}
+.name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meta{font-size:13px;color:var(--muted)}
+.mini{padding:8px;border-radius:10px;color:var(--muted)}
+.mini.del{color:var(--danger)}
+.empty{margin:30px 16px;padding:26px 16px;border:2px dashed var(--line);border-radius:16px;text-align:center;color:var(--muted)}
+.player{position:fixed;inset:auto 0 0 0;background:var(--surface);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
+.player .t{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;min-height:26px}
+.ctl{display:flex;justify-content:center;align-items:center;gap:22px;margin:6px 0}
+.ctl button{width:44px;height:44px;border-radius:50%;font-size:18px;border:1px solid var(--line)}
+.ctl .main{width:56px;height:56px;background:var(--accent);color:var(--on-accent);border:0;font-size:22px}
+.seek{display:flex;align-items:center;gap:8px;direction:ltr;font-size:12px;color:var(--muted)}
+input[type=range]{flex:1;accent-color:var(--hot)}
+dialog{border:0;border-radius:18px;background:var(--surface);color:var(--ink);padding:20px;width:min(92vw,380px)}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+dialog h2{margin:0 0 12px;font-size:18px}
+dialog input,dialog select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+.acts{display:flex;gap:8px;margin-top:16px;justify-content:flex-start}
+.note{font-size:12px;color:var(--muted);padding:0 16px 8px}
+dialog label.lb{display:block;margin:10px 0 4px;font-size:14px}
+dialog .hint{font-size:12px;color:var(--muted);margin-top:6px}
+dialog input.ltr{direction:ltr;text-align:left}
+</style>
+</head>
+<body>
+<header><h1>مكتبتي الصوتية</h1><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="ghost" id="yt">من يوتيوب</button><label class="btn" tabindex="0" id="upl">رفع ملفات صوتية<input id="file" type="file" accept="audio/*" multiple hidden></label></div></header>
+<div class="chips" id="chips" role="group" aria-label="المجلدات"></div>
+<div class="bar" id="bar"></div>
+<ul class="list" id="list"></ul>
+<div class="note" id="note"></div>
+
+<div class="player">
+  <div class="t" id="title">اختر ملفًا للتشغيل</div>
+  <div class="seek"><span id="cur">0:00</span><input type="range" id="seek" min="0" max="100" value="0" step="0.1" aria-label="موضع التشغيل"><span id="dur">0:00</span></div>
+  <div class="ctl">
+    <button id="next" aria-label="التالي">⏭</button>
+    <button id="pp" class="main" aria-label="تشغيل">▶</button>
+    <button id="prev" aria-label="السابق">⏮</button>
+  </div>
+</div>
+<audio id="au" preload="metadata"></audio>
+
+<dialog id="dlg"><h2 id="dt"></h2><div id="db"></div><div class="acts"><button class="btn" id="ok">حفظ</button><button class="ghost" id="no">إلغاء</button></div></dialog>
+
+<script>
+var db,folders=[],tracks=[],cur='all',queue=[],idx=-1,objUrl=null;
+var $=function(s){return document.querySelector(s)};
+var au=$('#au');
+
+function openDB(){return new Promise(function(res,rej){var r=indexedDB.open('audio-library',1);
+ r.onupgradeneeded=function(){var d=r.result;d.createObjectStore('folders',{keyPath:'id',autoIncrement:true});d.createObjectStore('tracks',{keyPath:'id',autoIncrement:true});};
+ r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)};});}
+function run(store,mode,fn){return new Promise(function(res,rej){var t=db.transaction(store,mode),rq=fn(t.objectStore(store));t.oncomplete=function(){res(rq&&rq.result)};t.onerror=function(){rej(t.error)};t.onabort=function(){rej(t.error)};});}
+async function load(){folders=await run('folders','readonly',function(s){return s.getAll()});tracks=await run('tracks','readonly',function(s){return s.getAll()});render();}
+
+function fmt(s){if(!isFinite(s))return '0:00';var m=Math.floor(s/60),x=Math.floor(s%60);return m+':'+(x<10?'0':'')+x}
+function size(b){return b>1048576?(b/1048576).toFixed(1)+' ميغا':Math.max(1,Math.round(b/1024))+' كيلو'}
+function visible(){return tracks.filter(function(t){return cur==='all'||t.folderId===cur}).sort(function(a,b){return a.id-b.id})}
+
+function render(){
+ var c=$('#chips');c.innerHTML='';
+ function chip(id,label){var b=document.createElement('button');b.className='chip';b.textContent=label;b.setAttribute('aria-pressed',cur===id);b.onclick=function(){cur=id;render()};c.appendChild(b)}
+ chip('all','الكل ('+tracks.length+')');
+ folders.forEach(function(f){chip(f.id,f.name+' ('+tracks.filter(function(t){return t.folderId===f.id}).length+')')});
+ var add=document.createElement('button');add.className='chip';add.textContent='＋ مجلد جديد';add.onclick=newFolder;c.appendChild(add);
+ var bar=$('#bar');bar.innerHTML='';
+ if(cur!=='all'){
+  var r=document.createElement('button');r.className='ghost';r.textContent='تعديل اسم المجلد';r.onclick=renameFolder;bar.appendChild(r);
+  var d=document.createElement('button');d.className='ghost';d.textContent='حذف المجلد';d.style.color='var(--danger)';d.onclick=delFolder;bar.appendChild(d);
+ }
+ var list=visible(),ul=$('#list');ul.innerHTML='';
+ if(!list.length){ul.innerHTML='<li class="empty">'+(cur==='all'?'ما فيه ملفات بعد. اضغط «رفع ملفات صوتية» وأضف أول ملف.':'هذا المجلد فاضي. اضغط «رفع ملفات صوتية» وراح تنضاف له الملفات هنا.')+'</li>'}
+ var playingId=queue[idx]&&queue[idx].id;
+ list.forEach(function(t,i){
+  var li=document.createElement('li');li.className='row'+(t.id===playingId?' on':'');
+  var p=document.createElement('button');p.className='play';p.textContent=(t.id===playingId&&!au.paused)?'⏸':'▶';p.setAttribute('aria-label','تشغيل '+t.name);p.onclick=function(){playList(list,i)};
+  var inf=document.createElement('div');inf.className='info';inf.innerHTML='<div class="name"></div><div class="meta"></div>';
+  inf.firstChild.textContent=t.name;inf.lastChild.textContent=size(t.size)+(t.folderId?' · '+((folders.find(function(f){return f.id===t.folderId})||{}).name||''):'');
+  var mv=document.createElement('button');mv.className='mini';mv.textContent='نقل';mv.onclick=function(){moveTrack(t)};
+  var rn=document.createElement('button');rn.className='mini';rn.textContent='اسم';rn.onclick=function(){renameTrack(t)};
+  var dl=document.createElement('button');dl.className='mini del';dl.textContent='حذف';dl.onclick=function(){delTrack(t)};
+  li.append(p,inf,mv,rn,dl);ul.appendChild(li);
+ });
+}
+
+/* dialogs */
+function ask(title,build,read){return new Promise(function(res){
+ $('#dt').textContent=title;var body=$('#db');body.innerHTML='';var el=build(body);var d=$('#dlg');
+ function done(v){d.close();$('#ok').onclick=$('#no').onclick=null;res(v)}
+ $('#ok').onclick=function(){done(read(el))};$('#no').onclick=function(){done(null)};d.oncancel=function(){res(null)};
+ d.showModal();if(el&&el.focus)el.focus();});}
+function askText(title,def){return ask(title,function(b){var i=document.createElement('input');i.value=def||'';i.maxLength=60;b.appendChild(i);return i},function(i){return i.value.trim()||null})}
+function askConfirm(title,msg){return ask(title,function(b){b.textContent=msg;return null},function(){return true})}
+
+async function newFolder(){var n=await askText('اسم المجلد الجديد');if(!n)return;
+ var id=await run('folders','readwrite',function(s){return s.add({name:n})});cur=id;await load();}
+async function renameFolder(){var f=folders.find(function(x){return x.id===cur});var n=await askText('اسم جديد للمجلد',f.name);if(!n)return;
+ f.name=n;await run('folders','readwrite',function(s){return s.put(f)});await load();}
+async function delFolder(){var f=folders.find(function(x){return x.id===cur});
+ if(!await askConfirm('حذف المجلد','راح يُحذف المجلد «'+f.name+'» مع كل الملفات اللي فيه. متأكد؟'))return;
+ var del=tracks.filter(function(t){return t.folderId===cur});
+ await run('tracks','readwrite',function(s){del.forEach(function(t){s.delete(t.id)})});
+ await run('folders','readwrite',function(s){return s.delete(cur)});cur='all';await load();}
+async function renameTrack(t){var n=await askText('اسم جديد للملف',t.name);if(!n)return;t.name=n;await run('tracks','readwrite',function(s){return s.put(t)});await load();}
+async function delTrack(t){if(!await askConfirm('حذف الملف','حذف «'+t.name+'»؟'))return;
+ if(queue[idx]&&queue[idx].id===t.id){au.pause();au.removeAttribute('src');idx=-1;$('#title').textContent='اختر ملفًا للتشغيل'}
+ await run('tracks','readwrite',function(s){return s.delete(t.id)});await load();}
+async function moveTrack(t){
+ var v=await ask('نقل «'+t.name+'» إلى',function(b){var s=document.createElement('select');
+  var o=document.createElement('option');o.value='';o.textContent='بدون مجلد';s.appendChild(o);
+  folders.forEach(function(f){var x=document.createElement('option');x.value=f.id;x.textContent=f.name;if(f.id===t.folderId)x.selected=true;s.appendChild(x)});b.appendChild(s);return s},function(s){return s.value});
+ if(v===null)return;t.folderId=v===''?null:Number(v);await run('tracks','readwrite',function(s){return s.put(t)});await load();}
+
+/* upload */
+$('#file').onchange=async function(e){
+ var files=Array.from(e.target.files);if(!files.length)return;
+ $('#note').textContent='جاري حفظ '+files.length+' ملف…';
+ try{
+  for(var f of files){await run('tracks','readwrite',function(s){return s.add({name:f.name.replace(/\.[^.]+$/,''),size:f.size,type:f.type,blob:f,folderId:cur==='all'?null:cur})});}
+  $('#note').textContent='تم الحفظ على جهازك. تقدر تشغّلها بدون إنترنت.';
+ }catch(err){$('#note').textContent='تعذّر الحفظ: المساحة ممتلئة أو المتصفح منع التخزين.'}
+ e.target.value='';await load();
+};
+$('#upl').onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();$('#file').click()}};
+
+/* youtube import (needs your own server, see server.py) */
+function getServer(){try{return localStorage.getItem('yt-server')||'http://localhost:5000'}catch(e){return 'http://localhost:5000'}}
+function setServer(v){try{localStorage.setItem('yt-server',v)}catch(e){}}
+function field(b,label,val,ph){var l=document.createElement('label');l.className='lb';l.textContent=label;var i=document.createElement('input');i.className='ltr';i.value=val||'';i.placeholder=ph||'';b.append(l,i);return i}
+async function ytImport(){
+ var u,s;
+ var v=await ask('تحميل صوت من يوتيوب',function(b){
+  u=field(b,'رابط الفيديو','','https://www.youtube.com/watch?v=...');
+  s=field(b,'عنوان السيرفر',getServer(),'http://localhost:5000');
+  var h=document.createElement('div');h.className='hint';h.textContent='لازم السيرفر (server.py) يكون شغّال. الملف يتحفظ في المجلد المفتوح حاليًا.';b.appendChild(h);return u},
+  function(){return {url:u.value.trim(),server:s.value.trim().replace(/\/+$/,'')}});
+ if(!v)return;
+ if(!/^https?:\/\/(www\.|m\.|music\.)?(youtube\.com|youtu\.be)\//i.test(v.url)){$('#note').textContent='الرابط مو رابط يوتيوب صحيح.';return}
+ if(!v.server){$('#note').textContent='اكتب عنوان السيرفر.';return}
+ setServer(v.server);
+ var btn=$('#yt');btn.disabled=true;$('#note').textContent='جاري التحميل والتحويل إلى صوت… قد ياخذ دقيقة.';
+ try{
+  var r=await fetch(v.server+'/api/audio?url='+encodeURIComponent(v.url));
+  if(!r.ok){var msg='';try{msg=(await r.json()).error}catch(e){}throw new Error(msg||('خطأ '+r.status))}
+  var blob=await r.blob();
+  var title='يوتيوب';try{title=decodeURIComponent(r.headers.get('X-Title')||'')||title}catch(e){}
+  await run('tracks','readwrite',function(st){return st.add({name:title,size:blob.size,type:blob.type||'audio/mpeg',blob:blob,folderId:cur==='all'?null:cur})});
+  $('#note').textContent='تم حفظ «'+title+'» على جهازك.';await load();
+ }catch(err){
+  $('#note').textContent='تعذّر التحميل: '+(err.message==='Failed to fetch'?'ما قدرت أتصل بالسيرفر. تأكد إنه شغّال والعنوان صحيح.':err.message);
+ }finally{btn.disabled=false}
+}
+$('#yt').onclick=ytImport;
+
+/* player */
+function playList(list,i){queue=list.slice();idx=i;start();}
+function start(){
+ var t=queue[idx];if(!t)return;
+ if(objUrl)URL.revokeObjectURL(objUrl);objUrl=URL.createObjectURL(t.blob);au.src=objUrl;au.play().catch(function(){});
+ $('#title').textContent=t.name;
+ if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:t.name,artist:'مكتبتي الصوتية'});navigator.mediaSession.setActionHandler('nexttrack',next);navigator.mediaSession.setActionHandler('previoustrack',prev)}catch(e){}}
+}
+function next(){if(!queue.length)return;idx=(idx+1)%queue.length;start()}
+function prev(){if(!queue.length)return;if(au.currentTime>3){au.currentTime=0;return}idx=(idx-1+queue.length)%queue.length;start()}
+$('#next').onclick=next;$('#prev').onclick=prev;
+$('#pp').onclick=function(){if(idx<0){var l=visible();if(l.length)playList(l,0);return}au.paused?au.play():au.pause()};
+au.onplay=au.onpause=function(){$('#pp').textContent=au.paused?'▶':'⏸';$('#pp').setAttribute('aria-label',au.paused?'تشغيل':'إيقاف مؤقت');render()};
+au.onended=next;
+au.ontimeupdate=function(){$('#cur').textContent=fmt(au.currentTime);$('#dur').textContent=fmt(au.duration);if(au.duration)$('#seek').value=au.currentTime/au.duration*100};
+$('#seek').oninput=function(e){if(au.duration)au.currentTime=e.target.value/100*au.duration};
+
+(async function(){
+ try{db=await openDB();if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();await load();}
+ catch(e){$('#note').textContent='هذا المتصفح لا يسمح بحفظ الملفات. جرّب فتح الصفحة في Chrome أو Safari مباشرة.';render();}
+})();
+</script>
+</body>
+</html>
