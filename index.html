@@ -72,8 +72,19 @@ dialog input.ltr{direction:ltr;text-align:left}
 
 <script type="module">
 import '@jofr/capacitor-media-session';
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, registerPlugin } from '@capacitor/core';
 import { LocalNotifications } from '@capacitor/local-notifications';
+var NativeMS=Capacitor.isNativePlatform()?registerPlugin('MediaSession'):null;
+function nerr(e){document.querySelector('#note').textContent='خطأ التحكم: '+((e&&e.message)||e)}
+function nCall(name,arg){if(!NativeMS)return;try{var r=NativeMS[name](arg);if(r&&r.catch)r.catch(nerr)}catch(e){nerr(e)}}
+function nativeMeta(title){nCall('setMetadata',{title:title,artist:'مكتبتي الصوتية',album:'',artwork:[]})}
+function nativeState(){nCall('setPlaybackState',{playbackState:au.paused?'paused':'playing'})}
+function nativePos(){nCall('setPositionState',{duration:au.duration,playbackRate:au.playbackRate||1,position:Math.min(au.currentTime,au.duration)})}
+function nativeInit(){if(!NativeMS)return;
+ function h(a,f){try{var r=NativeMS.setActionHandler({action:a},f);if(r&&r.catch)r.catch(nerr)}catch(e){nerr(e)}}
+ h('play',function(){au.play()});h('pause',function(){au.pause()});h('nexttrack',next);h('previoustrack',prev);
+ h('seekto',function(d){if(d&&isFinite(d.seekTime))au.currentTime=d.seekTime});
+}
 var notifAsked=false;
 async function dbg(){try{var p=await LocalNotifications.checkPermissions();var a=Capacitor.isPluginAvailable('MediaSession');document.querySelector('#note').textContent='تشخيص: إضافة التحكم='+(a?'موجودة':'غير موجودة')+' | الإشعارات='+p.display}catch(e){document.querySelector('#note').textContent='تشخيص: '+e.message}}
 function askNotif(){if(notifAsked||!Capacitor.isNativePlatform())return;notifAsked=true;LocalNotifications.requestPermissions().catch(function(){}).then(function(){setTimeout(dbg,500)})}
@@ -195,6 +206,7 @@ function start(){
  if(objUrl)URL.revokeObjectURL(objUrl);objUrl=URL.createObjectURL(t.blob);au.src=objUrl;au.play().catch(function(){});
  $('#title').textContent=t.name;
  if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:t.name,artist:'مكتبتي الصوتية'})}catch(e){}}
+ nativeMeta(t.name);
 }
 /* controls from lock screen / notification / headset */
 (function(){
@@ -206,13 +218,14 @@ function start(){
  h('seekforward',function(d){au.currentTime=Math.min(au.duration||0,au.currentTime+((d&&d.seekOffset)||10))});
  h('seekto',function(d){if(d&&isFinite(d.seekTime))au.currentTime=d.seekTime});
 })();
+nativeInit();
 var lastPos=0;
-function updatePos(){if(!('mediaSession' in navigator)||!isFinite(au.duration)||!au.duration)return;var n=Date.now();if(n-lastPos<1000)return;lastPos=n;try{navigator.mediaSession.setPositionState({duration:au.duration,playbackRate:au.playbackRate,position:Math.min(au.currentTime,au.duration)})}catch(e){}}
+function updatePos(){if(!('mediaSession' in navigator)||!isFinite(au.duration)||!au.duration)return;var n=Date.now();if(n-lastPos<1000)return;lastPos=n;try{navigator.mediaSession.setPositionState({duration:au.duration,playbackRate:au.playbackRate,position:Math.min(au.currentTime,au.duration)})}catch(e){}nativePos()}
 function next(){if(!queue.length)return;idx=(idx+1)%queue.length;start()}
 function prev(){if(!queue.length)return;if(au.currentTime>3){au.currentTime=0;return}idx=(idx-1+queue.length)%queue.length;start()}
 $('#next').onclick=next;$('#prev').onclick=prev;
 $('#pp').onclick=function(){if(idx<0){var l=visible();if(l.length)playList(l,0);return}au.paused?au.play():au.pause()};
-au.onplay=au.onpause=function(){if('mediaSession' in navigator)navigator.mediaSession.playbackState=au.paused?'paused':'playing';$('#pp').textContent=au.paused?'▶':'⏸';$('#pp').setAttribute('aria-label',au.paused?'تشغيل':'إيقاف مؤقت');render()};
+au.onplay=au.onpause=function(){if('mediaSession' in navigator)navigator.mediaSession.playbackState=au.paused?'paused':'playing';nativeState();$('#pp').textContent=au.paused?'▶':'⏸';$('#pp').setAttribute('aria-label',au.paused?'تشغيل':'إيقاف مؤقت');render()};
 au.onended=next;
 au.ontimeupdate=function(){updatePos();$('#cur').textContent=fmt(au.currentTime);$('#dur').textContent=fmt(au.duration);if(au.duration)$('#seek').value=au.currentTime/au.duration*100};
 $('#seek').oninput=function(e){if(au.duration)au.currentTime=e.target.value/100*au.duration};
