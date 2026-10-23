@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>مكتبتي الصوتية</title>
 <style>
-:root{--bg:#EDF2F0;--surface:#FFFFFF;--ink:#12302F;--muted:#5E7472;--line:#D3DEDB;--accent:#0F6B66;--on-accent:#FFFFFF;--hot:#D9822B;--danger:#B3382C;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1818;--surface:#152524;--ink:#E4F0EE;--muted:#8FA8A5;--line:#264240;--accent:#4FC2B8;--on-accent:#0D1818;--hot:#F0A24E;--danger:#F08074;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0D1818;--surface:#152524;--ink:#E4F0EE;--muted:#8FA8A5;--line:#264240;--accent:#4FC2B8;--on-accent:#0D1818;--hot:#F0A24E;--danger:#F08074;color-scheme:dark}
+:root{--bg:#EDF2F0;--surface:#FFFFFF;--ink:#12302F;--muted:#5E7472;--line:#D3DEDB;--accent:#0F6B66;--on-accent:#FFFFFF;--hot:#D9822B;--danger:#B3382C;--ok:#23804A;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1818;--surface:#152524;--ink:#E4F0EE;--muted:#8FA8A5;--line:#264240;--accent:#4FC2B8;--on-accent:#0D1818;--hot:#F0A24E;--danger:#F08074;--ok:#6FD39A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0D1818;--surface:#152524;--ink:#E4F0EE;--muted:#8FA8A5;--line:#264240;--accent:#4FC2B8;--on-accent:#0D1818;--hot:#F0A24E;--danger:#F08074;--ok:#6FD39A;color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,system-ui,sans-serif;line-height:1.6;padding-bottom:190px}
-header{padding:18px 16px 8px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,system-ui,sans-serif;line-height:1.6;padding-bottom:200px}
+header{padding:16px 16px 4px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 h1{font-size:22px;margin:0}
+h2{font-size:16px;margin:0 0 6px}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:disabled{opacity:.5}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.btn{background:var(--accent);color:var(--on-accent);padding:10px 16px;border-radius:12px;font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);padding:10px 16px;border-radius:12px;font-weight:600;display:inline-block}
 .ghost{border:1px solid var(--line);padding:8px 12px;border-radius:12px;background:var(--surface)}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:8px 16px}
 .chip{flex:none;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
@@ -26,38 +28,62 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .row{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 10px;margin-bottom:8px}
 .row.on{border-color:var(--hot);box-shadow:inset 4px 0 0 var(--hot)}
 .play{flex:none;width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:16px}
+.ico{flex:none;width:44px;height:44px;border-radius:12px;background:var(--bg);display:grid;place-items:center;font-size:20px}
 .info{flex:1;min-width:0;text-align:right}
 .name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .meta{font-size:13px;color:var(--muted)}
 .mini{padding:8px;border-radius:10px;color:var(--muted)}
 .mini.del{color:var(--danger)}
-.empty{margin:30px 16px;padding:26px 16px;border:2px dashed var(--line);border-radius:16px;text-align:center;color:var(--muted)}
-.player{position:fixed;inset:auto 0 0 0;background:var(--surface);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
-.player .t{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;min-height:26px}
-.ctl{display:flex;justify-content:center;align-items:center;gap:22px;margin:6px 0}
-.ctl button{width:44px;height:44px;border-radius:50%;font-size:18px;border:1px solid var(--line)}
-.ctl .main{width:56px;height:56px;background:var(--accent);color:var(--on-accent);border:0;font-size:22px}
+.empty{margin:20px 16px;padding:26px 16px;border:2px dashed var(--line);border-radius:16px;text-align:center;color:var(--muted)}
+.note{font-size:13px;color:var(--muted);padding:0 16px 8px;min-height:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin:8px 16px}
+.srow{display:flex;gap:8px}
+.inp,dialog input,dialog select,.card select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+.ltr{direction:ltr;text-align:left}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 16px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 10px;text-align:center;font-weight:600}
+.tile span{display:block;font-size:28px}
+.tile small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.lb{display:block;margin:10px 0 4px;font-size:14px}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0 0}
+.sw input{width:22px;height:22px;accent-color:var(--accent)}
+.st{font-size:13px;font-weight:600}
+.st.done{color:var(--ok)}.st.failed{color:var(--danger)}.st.running{color:var(--hot)}
+.banner{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.banner .u{flex:1;min-width:0;direction:ltr;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:var(--muted)}
+/* player + nav */
+.player{position:fixed;inset:auto 0 62px 0;background:var(--surface);border-top:1px solid var(--line);padding:8px 16px}
+.player video{display:block;width:100%;max-height:200px;background:#000;border-radius:12px;margin-bottom:6px}
+.player .t{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;min-height:24px}
+.ctl{display:flex;justify-content:center;align-items:center;gap:22px;margin:2px 0}
+.ctl button{width:40px;height:40px;border-radius:50%;font-size:16px;border:1px solid var(--line)}
+.ctl .main{width:50px;height:50px;background:var(--accent);color:var(--on-accent);border:0;font-size:20px}
 .seek{display:flex;align-items:center;gap:8px;direction:ltr;font-size:12px;color:var(--muted)}
 input[type=range]{flex:1;accent-color:var(--hot)}
+.nav{position:fixed;inset:auto 0 0 0;display:flex;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+.nav button{flex:1;padding:8px 2px;font-size:12px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:0;min-height:62px;justify-content:center}
+.nav button span{font-size:22px;line-height:1.2}
+.nav button[aria-current="page"]{color:var(--accent);font-weight:700}
 dialog{border:0;border-radius:18px;background:var(--surface);color:var(--ink);padding:20px;width:min(92vw,380px)}
 dialog::backdrop{background:rgba(0,0,0,.5)}
 dialog h2{margin:0 0 12px;font-size:18px}
-dialog input,dialog select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
 .acts{display:flex;gap:8px;margin-top:16px;justify-content:flex-start}
-.note{font-size:12px;color:var(--muted);padding:0 16px 8px}
-dialog label.lb{display:block;margin:10px 0 4px;font-size:14px}
-dialog .hint{font-size:12px;color:var(--muted);margin-top:6px}
-dialog input.ltr{direction:ltr;text-align:left}
+.tag{display:inline-block;padding:0 10px;border-radius:999px;background:var(--bg);border:1px solid var(--line);font-size:12px;margin-inline-end:8px;color:var(--ink)}
+#lock{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px}
+#lock[hidden]{display:none}
+#lock .box{width:min(92vw,340px);display:flex;flex-direction:column;gap:12px;text-align:center}
+#lock .big{font-size:48px}
+#lerr{color:var(--danger);min-height:22px;font-size:14px}
+dialog .hint{font-size:12px;color:var(--muted);margin-top:6px;word-break:break-all}
 </style>
 </head>
 <body>
-<header><h1>مكتبتي الصوتية</h1><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="ghost" id="yt">من يوتيوب</button><label class="btn" tabindex="0" id="upl">رفع ملفات صوتية<input id="file" type="file" accept="audio/*" multiple hidden></label></div></header>
-<div class="chips" id="chips" role="group" aria-label="المجلدات"></div>
-<div class="bar" id="bar"></div>
-<ul class="list" id="list"></ul>
+<header><h1 id="h1">المتصفح</h1></header>
 <div class="note" id="note"></div>
+<main id="view"></main>
 
-<div class="player">
+<div class="player" id="player">
+  <video id="au" playsinline preload="metadata" hidden></video>
   <div class="t" id="title">اختر ملفًا للتشغيل</div>
   <div class="seek"><span id="cur">0:00</span><input type="range" id="seek" min="0" max="100" value="0" step="0.1" aria-label="موضع التشغيل"><span id="dur">0:00</span></div>
   <div class="ctl">
@@ -66,78 +92,100 @@ dialog input.ltr{direction:ltr;text-align:left}
     <button id="prev" aria-label="السابق">⏮</button>
   </div>
 </div>
-<audio id="au" preload="metadata"></audio>
+
+<nav class="nav" id="nav" aria-label="التنقل">
+  <button data-t="browse"><span>🌐</span>المتصفح</button>
+  <button data-t="files"><span>📁</span>الملفات</button>
+  <button data-t="dl"><span>⬇️</span>التنزيلات</button>
+  <button data-t="set"><span>⚙️</span>الإعدادات</button>
+</nav>
 
 <dialog id="dlg"><h2 id="dt"></h2><div id="db"></div><div class="acts"><button class="btn" id="ok">حفظ</button><button class="ghost" id="no">إلغاء</button></div></dialog>
+
+<div id="lock" hidden>
+  <div class="box">
+    <div class="big">🔒</div>
+    <h2>مكتبتي الصوتية</h2>
+    <input type="password" id="lpw" class="inp ltr" placeholder="كلمة المرور" autocomplete="off">
+    <div id="lerr" role="alert"></div>
+    <button class="btn" id="lgo">فتح</button>
+    <button class="ghost" id="lbio" hidden>👆 الفتح بالبصمة</button>
+  </div>
+</div>
 
 <script type="module">
 import '@jofr/capacitor-media-session';
 import { Capacitor, registerPlugin } from '@capacitor/core';
 import { LocalNotifications } from '@capacitor/local-notifications';
+import { InAppBrowser } from '@capgo/inappbrowser';
+import { BiometricAuth } from '@aparajita/capacitor-biometric-auth';
+
 var NativeMS=Capacitor.isNativePlatform()?registerPlugin('MediaSession'):null;
-function nerr(e){document.querySelector('#note').textContent='خطأ التحكم: '+((e&&e.message)||e)}
+var $=function(s){return document.querySelector(s)};
+function h(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+function note(t){$('#note').textContent=t||''}
+function nerr(e){note('خطأ التحكم: '+((e&&e.message)||e))}
 function nCall(name,arg){if(!NativeMS)return;try{var r=NativeMS[name](arg);if(r&&r.catch)r.catch(nerr)}catch(e){nerr(e)}}
 function nativeMeta(title){nCall('setMetadata',{title:title,artist:'مكتبتي الصوتية',album:'',artwork:[]})}
 function nativeState(){nCall('setPlaybackState',{playbackState:au.paused?'paused':'playing'})}
 function nativePos(){nCall('setPositionState',{duration:au.duration,playbackRate:au.playbackRate||1,position:Math.min(au.currentTime,au.duration)})}
 function nativeInit(){if(!NativeMS)return;
- function h(a,f){try{var r=NativeMS.setActionHandler({action:a},f);if(r&&r.catch)r.catch(nerr)}catch(e){nerr(e)}}
- h('play',function(){au.play()});h('pause',function(){au.pause()});h('nexttrack',next);h('previoustrack',prev);
- h('seekto',function(d){if(d&&isFinite(d.seekTime))au.currentTime=d.seekTime});
+ function hh(a,f){try{var r=NativeMS.setActionHandler({action:a},f);if(r&&r.catch)r.catch(nerr)}catch(e){nerr(e)}}
+ hh('play',function(){au.play()});hh('pause',function(){au.pause()});hh('nexttrack',next);hh('previoustrack',prev);
+ hh('seekto',function(d){if(d&&isFinite(d.seekTime))au.currentTime=d.seekTime});
 }
 var notifAsked=false;
-async function dbg(){try{var p=await LocalNotifications.checkPermissions();var a=Capacitor.isPluginAvailable('MediaSession');document.querySelector('#note').textContent='تشخيص: إضافة التحكم='+(a?'موجودة':'غير موجودة')+' | الإشعارات='+p.display}catch(e){document.querySelector('#note').textContent='تشخيص: '+e.message}}
-function askNotif(){if(notifAsked||!Capacitor.isNativePlatform())return;notifAsked=true;LocalNotifications.requestPermissions().catch(function(){}).then(function(){setTimeout(dbg,500)})}
+function askNotif(){if(notifAsked||!Capacitor.isNativePlatform())return;notifAsked=true;LocalNotifications.requestPermissions().catch(function(){})}
 
-var db,folders=[],tracks=[],cur='all',queue=[],idx=-1,objUrl=null;
-var $=function(s){return document.querySelector(s)};
+/* ---------- settings ---------- */
+var DEF={server:'http://localhost:5000',askFolder:true,kind:'audio',vq:'720',aq:'128',theme:'auto',lock:false,pwHash:'',pwSalt:'',bio:false};
+var S=Object.assign({},DEF);
+try{var raw=localStorage.getItem('ab-settings');if(raw)Object.assign(S,JSON.parse(raw));else{var old=localStorage.getItem('yt-server');if(old)S.server=old}}catch(e){}
+function applyTheme(){var r=document.documentElement;if(S.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',S.theme)}
+function saveS(){try{localStorage.setItem('ab-settings',JSON.stringify(S))}catch(e){}applyTheme()}
+applyTheme();
+
+/* ---------- state + db ---------- */
+var db,folders=[],tracks=[],downloads=[],cur='all',queue=[],idx=-1,objUrl=null,tab='browse',lastUrl='';
+var active={};
 var au=$('#au');
 
-function openDB(){return new Promise(function(res,rej){var r=indexedDB.open('audio-library',1);
- r.onupgradeneeded=function(){var d=r.result;d.createObjectStore('folders',{keyPath:'id',autoIncrement:true});d.createObjectStore('tracks',{keyPath:'id',autoIncrement:true});};
+function openDB(){return new Promise(function(res,rej){var r=indexedDB.open('audio-library',2);
+ r.onupgradeneeded=function(){var d=r.result;
+  ['folders','tracks','downloads'].forEach(function(n){if(!d.objectStoreNames.contains(n))d.createObjectStore(n,{keyPath:'id',autoIncrement:true})})};
  r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)};});}
 function run(store,mode,fn){return new Promise(function(res,rej){var t=db.transaction(store,mode),rq=fn(t.objectStore(store));t.oncomplete=function(){res(rq&&rq.result)};t.onerror=function(){rej(t.error)};t.onabort=function(){rej(t.error)};});}
-async function load(){folders=await run('folders','readonly',function(s){return s.getAll()});tracks=await run('tracks','readonly',function(s){return s.getAll()});render();}
+async function load(){
+ folders=await run('folders','readonly',function(s){return s.getAll()});
+ tracks=await run('tracks','readonly',function(s){return s.getAll()});
+ downloads=await run('downloads','readonly',function(s){return s.getAll()});
+ render();}
 
 function fmt(s){if(!isFinite(s))return '0:00';var m=Math.floor(s/60),x=Math.floor(s%60);return m+':'+(x<10?'0':'')+x}
 function size(b){return b>1048576?(b/1048576).toFixed(1)+' ميغا':Math.max(1,Math.round(b/1024))+' كيلو'}
+function when(ts){try{return new Date(ts).toLocaleString('ar-SA-u-ca-gregory-nu-latn',{dateStyle:'medium',timeStyle:'short'})}catch(e){return new Date(ts).toLocaleString()}}
 function visible(){return tracks.filter(function(t){return cur==='all'||t.folderId===cur}).sort(function(a,b){return a.id-b.id})}
+function folderName(id){var f=folders.find(function(x){return x.id===id});return f?f.name:''}
 
-function render(){
- var c=$('#chips');c.innerHTML='';
- function chip(id,label){var b=document.createElement('button');b.className='chip';b.textContent=label;b.setAttribute('aria-pressed',cur===id);b.onclick=function(){cur=id;render()};c.appendChild(b)}
- chip('all','الكل ('+tracks.length+')');
- folders.forEach(function(f){chip(f.id,f.name+' ('+tracks.filter(function(t){return t.folderId===f.id}).length+')')});
- var add=document.createElement('button');add.className='chip';add.textContent='＋ مجلد جديد';add.onclick=newFolder;c.appendChild(add);
- var bar=$('#bar');bar.innerHTML='';
- if(cur!=='all'){
-  var r=document.createElement('button');r.className='ghost';r.textContent='تعديل اسم المجلد';r.onclick=renameFolder;bar.appendChild(r);
-  var d=document.createElement('button');d.className='ghost';d.textContent='حذف المجلد';d.style.color='var(--danger)';d.onclick=delFolder;bar.appendChild(d);
- }
- var list=visible(),ul=$('#list');ul.innerHTML='';
- if(!list.length){ul.innerHTML='<li class="empty">'+(cur==='all'?'ما فيه ملفات بعد. اضغط «رفع ملفات صوتية» وأضف أول ملف.':'هذا المجلد فاضي. اضغط «رفع ملفات صوتية» وراح تنضاف له الملفات هنا.')+'</li>'}
- var playingId=queue[idx]&&queue[idx].id;
- list.forEach(function(t,i){
-  var li=document.createElement('li');li.className='row'+(t.id===playingId?' on':'');
-  var p=document.createElement('button');p.className='play';p.textContent=(t.id===playingId&&!au.paused)?'⏸':'▶';p.setAttribute('aria-label','تشغيل '+t.name);p.onclick=function(){playList(list,i)};
-  var inf=document.createElement('div');inf.className='info';inf.innerHTML='<div class="name"></div><div class="meta"></div>';
-  inf.firstChild.textContent=t.name;inf.lastChild.textContent=size(t.size)+(t.folderId?' · '+((folders.find(function(f){return f.id===t.folderId})||{}).name||''):'');
-  var mv=document.createElement('button');mv.className='mini';mv.textContent='نقل';mv.onclick=function(){moveTrack(t)};
-  var rn=document.createElement('button');rn.className='mini';rn.textContent='اسم';rn.onclick=function(){renameTrack(t)};
-  var dl=document.createElement('button');dl.className='mini del';dl.textContent='حذف';dl.onclick=function(){delTrack(t)};
-  li.append(p,inf,mv,rn,dl);ul.appendChild(li);
- });
-}
+/* ---------- tabs ---------- */
+var TITLES={browse:'المتصفح',files:'الملفات',dl:'التنزيلات',set:'الإعدادات'};
+function setTab(t){tab=t;$('#h1').textContent=TITLES[t];
+ document.querySelectorAll('#nav button').forEach(function(b){if(b.dataset.t===t)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+ window.scrollTo(0,0);render();}
+document.querySelectorAll('#nav button').forEach(function(b){b.onclick=function(){setTab(b.dataset.t)}});
+function render(){if(tab==='browse')renderBrowse();else if(tab==='files')renderFiles();else if(tab==='dl')renderDl();else renderSet();}
 
-/* dialogs */
-function ask(title,build,read){return new Promise(function(res){
- $('#dt').textContent=title;var body=$('#db');body.innerHTML='';var el=build(body);var d=$('#dlg');
+/* ---------- dialogs ---------- */
+function ask(title,build,read,okLabel){return new Promise(function(res){
+ $('#dt').textContent=title;$('#ok').textContent=okLabel||'حفظ';var body=$('#db');body.innerHTML='';var el=build(body);var d=$('#dlg');
  function done(v){d.close();$('#ok').onclick=$('#no').onclick=null;res(v)}
  $('#ok').onclick=function(){done(read(el))};$('#no').onclick=function(){done(null)};d.oncancel=function(){res(null)};
  d.showModal();if(el&&el.focus)el.focus();});}
 function askText(title,def){return ask(title,function(b){var i=document.createElement('input');i.value=def||'';i.maxLength=60;b.appendChild(i);return i},function(i){return i.value.trim()||null})}
-function askConfirm(title,msg){return ask(title,function(b){b.textContent=msg;return null},function(){return true})}
+function askConfirm(title,msg){return ask(title,function(b){b.textContent=msg;return null},function(){return true},'تأكيد')}
+function sel(opts,val){var s=document.createElement('select');opts.forEach(function(o){var x=document.createElement('option');x.value=o[0];x.textContent=o[1];if(String(o[0])===String(val))x.selected=true;s.appendChild(x)});return s}
 
+/* ---------- folders / tracks ---------- */
 async function newFolder(){var n=await askText('اسم المجلد الجديد');if(!n)return;
  var id=await run('folders','readwrite',function(s){return s.add({name:n})});cur=id;await load();}
 async function renameFolder(){var f=folders.find(function(x){return x.id===cur});var n=await askText('اسم جديد للمجلد',f.name);if(!n)return;
@@ -149,74 +197,258 @@ async function delFolder(){var f=folders.find(function(x){return x.id===cur});
  await run('folders','readwrite',function(s){return s.delete(cur)});cur='all';await load();}
 async function renameTrack(t){var n=await askText('اسم جديد للملف',t.name);if(!n)return;t.name=n;await run('tracks','readwrite',function(s){return s.put(t)});await load();}
 async function delTrack(t){if(!await askConfirm('حذف الملف','حذف «'+t.name+'»؟'))return;
- if(queue[idx]&&queue[idx].id===t.id){au.pause();au.removeAttribute('src');idx=-1;$('#title').textContent='اختر ملفًا للتشغيل'}
+ if(queue[idx]&&queue[idx].id===t.id){au.pause();au.removeAttribute('src');au.hidden=true;idx=-1;$('#title').textContent='اختر ملفًا للتشغيل'}
  await run('tracks','readwrite',function(s){return s.delete(t.id)});await load();}
 async function moveTrack(t){
- var v=await ask('نقل «'+t.name+'» إلى',function(b){var s=document.createElement('select');
-  var o=document.createElement('option');o.value='';o.textContent='بدون مجلد';s.appendChild(o);
-  folders.forEach(function(f){var x=document.createElement('option');x.value=f.id;x.textContent=f.name;if(f.id===t.folderId)x.selected=true;s.appendChild(x)});b.appendChild(s);return s},function(s){return s.value});
+ var v=await ask('نقل «'+t.name+'» إلى',function(b){var s=sel([['','بدون مجلد']].concat(folders.map(function(f){return [f.id,f.name]})),t.folderId||'');b.appendChild(s);return s},function(s){return s.value});
  if(v===null)return;t.folderId=v===''?null:Number(v);await run('tracks','readwrite',function(s){return s.put(t)});await load();}
 
-/* upload */
-$('#file').onchange=async function(e){
+/* ---------- tab 2: files ---------- */
+async function uploadFiles(e){
  var files=Array.from(e.target.files);if(!files.length)return;
- $('#note').textContent='جاري حفظ '+files.length+' ملف…';
+ note('جاري حفظ '+files.length+' ملف…');
  try{
-  for(var f of files){await run('tracks','readwrite',function(s){return s.add({name:f.name.replace(/\.[^.]+$/,''),size:f.size,type:f.type,blob:f,folderId:cur==='all'?null:cur})});}
-  $('#note').textContent='تم الحفظ على جهازك. تقدر تشغّلها بدون إنترنت.';
- }catch(err){$('#note').textContent='تعذّر الحفظ: المساحة ممتلئة أو المتصفح منع التخزين.'}
+  for(var f of files){await run('tracks','readwrite',function(s){return s.add({name:f.name.replace(/\.[^.]+$/,''),size:f.size,type:f.type,kind:(f.type||'').indexOf('video')===0?'video':'audio',blob:f,folderId:cur==='all'?null:cur})});}
+  note('تم الحفظ على جهازك. تقدر تشغّلها بدون إنترنت.');
+ }catch(err){note('تعذّر الحفظ: المساحة ممتلئة أو المتصفح منع التخزين.')}
  e.target.value='';await load();
-};
-$('#upl').onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();$('#file').click()}};
+}
+function renderFiles(){
+ var v=$('#view');v.innerHTML='';
+ var top=h('div','bar');
+ var lab=h('label','btn','رفع ملفات');lab.tabIndex=0;
+ var inp=document.createElement('input');inp.type='file';inp.accept='audio/*,video/*';inp.multiple=true;inp.hidden=true;inp.onchange=uploadFiles;lab.appendChild(inp);
+ lab.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();inp.click()}};
+ top.appendChild(lab);v.appendChild(top);
+ var c=h('div','chips');c.setAttribute('role','group');c.setAttribute('aria-label','المجلدات');
+ function chip(id,label){var b=h('button','chip',label);b.setAttribute('aria-pressed',cur===id);b.onclick=function(){cur=id;renderFiles()};c.appendChild(b)}
+ chip('all','الكل ('+tracks.length+')');
+ folders.forEach(function(f){chip(f.id,f.name+' ('+tracks.filter(function(t){return t.folderId===f.id}).length+')')});
+ var add=h('button','chip','＋ مجلد جديد');add.onclick=newFolder;c.appendChild(add);v.appendChild(c);
+ if(cur!=='all'){
+  var bar=h('div','bar');
+  var r=h('button','ghost','تعديل اسم المجلد');r.onclick=renameFolder;bar.appendChild(r);
+  var d=h('button','ghost','حذف المجلد');d.style.color='var(--danger)';d.onclick=delFolder;bar.appendChild(d);v.appendChild(bar);
+ }
+ var list=visible(),ul=h('ul','list');
+ if(!list.length){var em=h('li','empty',cur==='all'?'ما فيه ملفات بعد. ارفع ملفات أو حمّل من تبويب المتصفح.':'هذا المجلد فاضي.');ul.appendChild(em)}
+ var playingId=queue[idx]&&queue[idx].id;
+ list.forEach(function(t,i){
+  var li=h('li','row'+(t.id===playingId?' on':''));
+  var p=h('button','play',(t.id===playingId&&!au.paused)?'⏸':'▶');p.setAttribute('aria-label','تشغيل '+t.name);p.onclick=function(){playList(list,i)};
+  var inf=h('div','info');inf.appendChild(h('div','name',(t.kind==='video'?'🎬 ':'🎵 ')+t.name));
+  inf.appendChild(h('div','meta',size(t.size)+(t.folderId?' · '+folderName(t.folderId):'')));
+  var mv=h('button','mini','نقل');mv.onclick=function(){moveTrack(t)};
+  var rn=h('button','mini','اسم');rn.onclick=function(){renameTrack(t)};
+  var dl=h('button','mini del','حذف');dl.onclick=function(){delTrack(t)};
+  li.append(p,inf,mv,rn,dl);ul.appendChild(li);
+ });
+ v.appendChild(ul);
+}
 
-/* youtube import (needs your own server, see server.py) */
-function getServer(){try{return localStorage.getItem('yt-server')||'http://localhost:5000'}catch(e){return 'http://localhost:5000'}}
-function setServer(v){try{localStorage.setItem('yt-server',v)}catch(e){}}
-function field(b,label,val,ph){var l=document.createElement('label');l.className='lb';l.textContent=label;var i=document.createElement('input');i.className='ltr';i.value=val||'';i.placeholder=ph||'';b.append(l,i);return i}
-async function ytImport(){
- var u,s;
- var v=await ask('تحميل صوت من يوتيوب',function(b){
-  u=field(b,'رابط الفيديو','','https://www.youtube.com/watch?v=...');
-  s=field(b,'عنوان السيرفر',getServer(),'http://localhost:5000');
-  var h=document.createElement('div');h.className='hint';h.textContent='لازم السيرفر (server.py) يكون شغّال. الملف يتحفظ في المجلد المفتوح حاليًا.';b.appendChild(h);return u},
-  function(){return {url:u.value.trim(),server:s.value.trim().replace(/\/+$/,'')}});
- if(!v)return;
- if(!/^https?:\/\/(www\.|m\.|music\.)?(youtube\.com|youtu\.be)\//i.test(v.url)){$('#note').textContent='الرابط مو رابط يوتيوب صحيح.';return}
- if(!v.server){$('#note').textContent='اكتب عنوان السيرفر.';return}
- setServer(v.server);
- var btn=$('#yt');btn.disabled=true;$('#note').textContent='جاري التحميل والتحويل إلى صوت… قد ياخذ دقيقة.';
+/* ---------- tab 1: browser ---------- */
+function platform(u){var host;try{host=new URL(u).hostname.toLowerCase()}catch(e){return null}
+ if(/(^|\.)youtube\.com$|^youtu\.be$/.test(host))return 'youtube';
+ if(/(^|\.)soundcloud\.com$/.test(host))return 'soundcloud';
+ if(/(^|\.)spotify\.com$/.test(host))return 'spotify';
+ return null}
+function isItem(u){var x;try{x=new URL(u)}catch(e){return false}var p=platform(u);
+ if(p==='youtube'){return x.hostname==='youtu.be'?x.pathname.length>1:(x.pathname==='/watch'||x.pathname.indexOf('/shorts/')===0||x.pathname.indexOf('/live/')===0)}
+ if(p==='soundcloud'){return x.pathname.split('/').filter(Boolean).length>=2}
+ return false}
+function toUrl(q){if(/^https?:\/\//i.test(q))return q;if(!/\s/.test(q)&&/^[^\s]+\.[a-z]{2,}(\/|$)/i.test(q))return 'https://'+q;return 'https://www.google.com/search?q='+encodeURIComponent(q)}
+
+var ibReady=false;
+function initBrowserEvents(){if(ibReady||!Capacitor.isNativePlatform())return;ibReady=true;
  try{
-  var r=await fetch(v.server+'/api/audio?url='+encodeURIComponent(v.url));
+  InAppBrowser.addListener('urlChangeEvent',function(e){if(e&&e.url)lastUrl=e.url});
+  InAppBrowser.addListener('closeEvent',function(){
+   setTimeout(function(){if(tab==='browse')renderBrowse();if(platform(lastUrl)&&(isItem(lastUrl)||platform(lastUrl)==='spotify'))startDownload(lastUrl)},300)});
+ }catch(e){}
+}
+async function openBrowser(url){
+ lastUrl=url;
+ if(Capacitor.isNativePlatform()){
+  try{initBrowserEvents();await InAppBrowser.openWebView({url:url,title:'المتصفح',toolbarType:'navigation',showReloadButton:true});return}
+  catch(e){note('تعذّر فتح المتصفح الداخلي، فتحته بشكل عادي.')}
+ }
+ window.open(url,'_blank');
+}
+function renderBrowse(){
+ var v=$('#view');v.innerHTML='';
+ var box=h('div','card');
+ var i=h('input','inp ltr');i.type='text';i.placeholder='ابحث في جوجل أو اكتب رابط';i.enterKeyHint='go';
+ var go=h('button','btn','اذهب');var row=h('div','srow');row.append(i,go);
+ function doGo(){var q=i.value.trim();if(q)openBrowser(toUrl(q))}
+ go.onclick=doGo;i.onkeydown=function(e){if(e.key==='Enter')doGo()};
+ box.appendChild(row);v.appendChild(box);
+
+ var g=h('div','tiles');
+ [['Google','🔍','بحث','https://www.google.com/'],['YouTube','▶️','صوت وفيديو','https://m.youtube.com/'],['SoundCloud','☁️','صوت','https://soundcloud.com/'],['Spotify','🎧','استماع فقط (محمي)','https://open.spotify.com/']].forEach(function(p){
+  var b=h('button','tile');b.appendChild(h('span',null,p[1]));b.appendChild(document.createTextNode(p[0]));b.appendChild(h('small',null,p[2]));
+  b.onclick=function(){openBrowser(p[3])};g.appendChild(b)});
+ v.appendChild(g);
+
+ var c2=h('div','card');c2.appendChild(h('h2',null,'حمّل من رابط'));
+ var u=h('input','inp ltr');u.type='text';u.placeholder='https://...';
+ var pb=h('button','ghost','لصق');
+ pb.onclick=async function(){try{u.value=await navigator.clipboard.readText()}catch(e){note('اضغط مطوّلًا على الخانة والصق الرابط.')}};
+ var db2=h('button','btn','تحميل');db2.onclick=function(){var x=u.value.trim();if(x)startDownload(x)};
+ var r2=h('div','srow');r2.append(u,pb);c2.appendChild(r2);
+ var r3=h('div','bar');r3.style.padding='10px 0 0';r3.appendChild(db2);c2.appendChild(r3);v.appendChild(c2);
+
+ if(lastUrl&&platform(lastUrl)){
+  var c3=h('div','card banner');c3.appendChild(h('div','u',lastUrl));
+  var b3=h('button','btn','حمّل هذا');b3.onclick=function(){startDownload(lastUrl)};c3.appendChild(b3);v.appendChild(c3);
+ }
+ var tip=h('div','note','تصفّح داخل التطبيق، وبعد ما تقفل المتصفح وأنت على فيديو أو أغنية يطلع لك خيار التحميل تلقائيًا.');tip.style.padding='8px 16px';v.appendChild(tip);
+}
+
+/* ---------- download flow ---------- */
+async function startDownload(url){
+ var p=platform(url);
+ if(p==='spotify'){note('سبوتيفاي محمي بحقوق النشر (DRM) وما يقدر ينحمل منه. تقدر تدوّر على نفس الأغنية في يوتيوب أو ساوند كلاود.');return}
+ if(!p||!isItem(url)){note('افتح صفحة فيديو أو أغنية محددة (مو الصفحة الرئيسية) وبعدين حمّل.');return}
+ if(!S.server){note('اكتب عنوان السيرفر في الإعدادات.');setTab('set');return}
+ var els={};
+ var v=await ask('تحميل',function(b){
+  var inf=h('div','hint ltr',url);b.appendChild(inf);
+  b.appendChild(h('label','lb','النوع'));
+  els.kind=sel(p==='soundcloud'?[['audio','صوت (MP3)']]:[['audio','صوت (MP3)'],['video','فيديو (MP4)']],S.kind);b.appendChild(els.kind);
+  b.appendChild(h('label','lb','الجودة'));
+  els.q=document.createElement('select');b.appendChild(els.q);
+  function fillQ(){els.q.innerHTML='';var isV=els.kind.value==='video';
+   (isV?[['360','360p'],['480','480p'],['720','720p'],['1080','1080p']]:[['128','128 kbps'],['192','192 kbps'],['320','320 kbps']]).forEach(function(o){var x=document.createElement('option');x.value=o[0];x.textContent=o[1];els.q.appendChild(x)});
+   els.q.value=isV?S.vq:S.aq}
+  els.kind.onchange=fillQ;fillQ();
+  if(S.askFolder){
+   b.appendChild(h('label','lb','احفظ في مجلد'));
+   els.f=sel([['','بدون مجلد']].concat(folders.map(function(f){return [f.id,f.name]})).concat([['__new','＋ مجلد جديد…']]),cur==='all'?'':cur);b.appendChild(els.f);
+  }
+  return els.kind},
+  function(){return {kind:els.kind.value,q:els.q.value,f:els.f?els.f.value:(cur==='all'?'':String(cur))}},'تحميل');
+ if(!v)return;
+ var folderId=null;
+ if(v.f==='__new'){var n=await askText('اسم المجلد الجديد');if(!n)return;folderId=await run('folders','readwrite',function(s){return s.add({name:n})});folders.push({id:folderId,name:n})}
+ else if(v.f!=='')folderId=Number(v.f);
+ var rec={name:url,url:url,kind:v.kind,q:v.q,status:'running',time:Date.now(),folderId:folderId,folder:folderId?folderName(folderId):''};
+ rec.id=await run('downloads','readwrite',function(s){return s.add(rec)});
+ active[rec.id]=true;await load();setTab('dl');
+ try{
+  var r=await fetch(S.server+'/api/download?url='+encodeURIComponent(url)+'&kind='+v.kind+'&q='+v.q);
   if(!r.ok){var msg='';try{msg=(await r.json()).error}catch(e){}throw new Error(msg||('خطأ '+r.status))}
   var blob=await r.blob();
-  var title='يوتيوب';try{title=decodeURIComponent(r.headers.get('X-Title')||'')||title}catch(e){}
-  await run('tracks','readwrite',function(st){return st.add({name:title,size:blob.size,type:blob.type||'audio/mpeg',blob:blob,folderId:cur==='all'?null:cur})});
-  $('#note').textContent='تم حفظ «'+title+'» على جهازك.';await load();
+  var title=v.kind==='video'?'فيديو':'صوت';try{title=decodeURIComponent(r.headers.get('X-Title')||'')||title}catch(e){}
+  await run('tracks','readwrite',function(st){return st.add({name:title,size:blob.size,type:blob.type||(v.kind==='video'?'video/mp4':'audio/mpeg'),kind:v.kind,blob:blob,folderId:folderId})});
+  rec.name=title;rec.size=blob.size;rec.status='done';rec.finished=Date.now();
  }catch(err){
-  $('#note').textContent='تعذّر التحميل: '+(err.message==='Failed to fetch'?'ما قدرت أتصل بالسيرفر. تأكد إنه شغّال والعنوان صحيح.':err.message);
- }finally{btn.disabled=false}
+  rec.status='failed';rec.error=(err.message==='Failed to fetch'?'ما قدرت أتصل بالسيرفر. تأكد إنه شغّال والعنوان صحيح.':err.message);
+ }
+ delete active[rec.id];
+ await run('downloads','readwrite',function(s){return s.put(rec)});
+ note(rec.status==='done'?'تم حفظ «'+rec.name+'» على جهازك.':'');await load();
 }
-$('#yt').onclick=ytImport;
 
-/* player */
+/* ---------- tab 3: downloads ---------- */
+function renderDl(){
+ var v=$('#view');v.innerHTML='';
+ if(!downloads.length){v.appendChild(h('div','empty','ما فيه تنزيلات بعد. حمّل من تبويب المتصفح.'));return}
+ var bar=h('div','bar');var clr=h('button','ghost','مسح السجل');
+ clr.onclick=async function(){if(!await askConfirm('مسح السجل','يُمسح السجل فقط، والملفات المحمّلة تبقى في مكتبتك.'))return;
+  var keep=downloads.filter(function(d){return active[d.id]});
+  await run('downloads','readwrite',function(s){downloads.forEach(function(d){if(!active[d.id])s.delete(d.id)})});await load()};
+ bar.appendChild(clr);v.appendChild(bar);
+ var ul=h('ul','list');
+ downloads.slice().sort(function(a,b){return b.time-a.time}).forEach(function(d){
+  var li=h('li','row');li.appendChild(h('div','ico',d.kind==='video'?'🎬':'🎵'));
+  var inf=h('div','info');inf.appendChild(h('div','name',d.name));
+  var st=d.status==='done'?'تم':d.status==='failed'?'فشل':'جاري التحميل…';
+  var line=h('div','st '+d.status);line.appendChild(h('span','tag',d.kind==='video'?'فيديو':'صوت'));
+  line.appendChild(document.createTextNode(st+(d.status==='failed'&&d.error?' — '+d.error:'')));inf.appendChild(line);
+  inf.appendChild(h('div','meta',when(d.time)+(d.size?' · '+size(d.size):'')+(d.folder?' · 📁 '+d.folder:'')));
+  li.appendChild(inf);
+  if(!active[d.id]){var x=h('button','mini del','حذف');x.onclick=async function(){await run('downloads','readwrite',function(st2){return st2.delete(d.id)});await load()};li.appendChild(x)}
+  ul.appendChild(li)});
+ v.appendChild(ul);
+}
+
+/* ---------- tab 4: settings ---------- */
+function renderSet(){
+ var v=$('#view');v.innerHTML='';
+ function sec(t){var d=h('section','card');d.appendChild(h('h2',null,t));v.appendChild(d);return d}
+ function fld(p,label,node){p.appendChild(h('label','lb',label));p.appendChild(node);return node}
+ var s1=sec('السيرفر');
+ var si=h('input','inp ltr');si.value=S.server;si.placeholder='http://localhost:5000';
+ si.onchange=function(){S.server=si.value.trim().replace(/\/+$/,'');saveS()};
+ fld(s1,'عنوان السيرفر (server.py)',si);
+ var tb=h('button','ghost','اختبار الاتصال');tb.style.marginTop='10px';var tr=h('div','hint');
+ tb.onclick=async function(){S.server=si.value.trim().replace(/\/+$/,'');saveS();tr.textContent='جاري الاختبار…';
+  try{var c=new AbortController();var to=setTimeout(function(){c.abort()},8000);var r=await fetch(S.server+'/',{signal:c.signal});clearTimeout(to);tr.textContent=r.ok?'✔ السيرفر شغّال':'السيرفر رد بخطأ '+r.status}
+  catch(e){tr.textContent='✖ ما قدرت أتصل بالسيرفر'}};
+ s1.append(tb,tr);
+
+ var s2=sec('التحميل');
+ var sw=h('label','sw','اسألني عن المجلد عند كل تحميل');var cb=document.createElement('input');cb.type='checkbox';cb.checked=S.askFolder;cb.onchange=function(){S.askFolder=cb.checked;saveS()};sw.appendChild(cb);s2.appendChild(sw);
+ var k=fld(s2,'النوع الافتراضي',sel([['audio','صوت (MP3)'],['video','فيديو (MP4)']],S.kind));k.onchange=function(){S.kind=k.value;saveS()};
+ var vq=fld(s2,'جودة الفيديو الافتراضية',sel([['360','360p'],['480','480p'],['720','720p'],['1080','1080p']],S.vq));vq.onchange=function(){S.vq=vq.value;saveS()};
+ var aq=fld(s2,'جودة الصوت الافتراضية',sel([['128','128 kbps'],['192','192 kbps'],['320','320 kbps']],S.aq));aq.onchange=function(){S.aq=aq.value;saveS()};
+
+ var s6=sec('الأمان');
+ var lw=h('label','sw','قفل التطبيق بكلمة مرور');var lc=document.createElement('input');lc.type='checkbox';lc.checked=!!(S.lock&&S.pwHash);
+ lc.onchange=async function(){
+  if(lc.checked){var pw=await askNewPw();if(!pw){lc.checked=false;return}
+   S.pwSalt=String(Date.now())+Math.random();S.pwHash=await hashPw(pw,S.pwSalt);S.lock=true;saveS();note('تم تفعيل القفل. يُطلب عند فتح التطبيق.')}
+  else{if(!await verifyPw()){lc.checked=true;return}
+   S.lock=false;S.bio=false;S.pwHash='';S.pwSalt='';saveS();note('تم إلغاء القفل.')}
+  renderSet()};
+ lw.appendChild(lc);s6.appendChild(lw);
+ if(S.lock&&S.pwHash){
+  var cp=h('button','ghost','تغيير كلمة المرور');cp.style.marginTop='10px';
+  cp.onclick=async function(){if(!await verifyPw())return;var pw=await askNewPw();if(!pw)return;
+   S.pwSalt=String(Date.now())+Math.random();S.pwHash=await hashPw(pw,S.pwSalt);saveS();note('تم تغيير كلمة المرور.')};
+  var ln=h('button','ghost','قفل الآن');ln.style.marginTop='10px';ln.style.marginInlineStart='8px';ln.onclick=showLock;
+  s6.append(cp,ln);
+  var bh=h('div','hint','جاري فحص البصمة…');s6.appendChild(bh);
+  bioAvailable().then(function(a){
+   if(!a){bh.textContent='البصمة غير متاحة: تأكد إن عندك بصمة مسجّلة في إعدادات الجوال.';return}
+   bh.remove();
+   var bw=h('label','sw','فتح التطبيق بالبصمة');var bc=document.createElement('input');bc.type='checkbox';bc.checked=!!S.bio;
+   bc.onchange=async function(){
+    if(bc.checked){if(!await bioAuth('تأكيد البصمة')){bc.checked=false;note('ما تأكدت البصمة، ما انفعّل الخيار.');return}S.bio=true}
+    else S.bio=false;
+    saveS()};
+   bw.appendChild(bc);s6.appendChild(bw)});
+  s6.appendChild(h('div','hint','إذا نسيت كلمة المرور ما فيه استرجاع: لازم تمسح بيانات التطبيق من إعدادات الجوال (وتنحذف الملفات المحفوظة).'));
+ }
+
+ var s3=sec('المظهر');
+ var th=fld(s3,'السمة',sel([['auto','تلقائي (حسب الجوال)'],['light','فاتح'],['dark','داكن']],S.theme));th.onchange=function(){S.theme=th.value;saveS()};
+
+ var s4=sec('التخزين');var su=h('div','meta','جاري الحساب…');s4.appendChild(su);
+ try{navigator.storage.estimate().then(function(e){su.textContent='المستخدم: '+size(e.usage||0)+(e.quota?' من '+size(e.quota):'')}).catch(function(){su.textContent=''})}catch(e){su.textContent=''}
+
+ var s5=sec('ملاحظات');
+ s5.appendChild(h('div','meta','التحميل من يوتيوب وساوند كلاود فقط. سبوتيفاي محمي (DRM) ولا يمكن التحميل منه. حمّل فقط المحتوى المسموح لك بتحميله.'));
+}
+
+/* ---------- player ---------- */
 function playList(list,i){queue=list.slice();idx=i;start();}
 function start(){
  var t=queue[idx];if(!t)return;
  askNotif();
- if(objUrl)URL.revokeObjectURL(objUrl);objUrl=URL.createObjectURL(t.blob);au.src=objUrl;au.play().catch(function(){});
+ if(objUrl)URL.revokeObjectURL(objUrl);objUrl=URL.createObjectURL(t.blob);au.src=objUrl;au.hidden=(t.kind!=='video');au.play().catch(function(){});
  $('#title').textContent=t.name;
  if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:t.name,artist:'مكتبتي الصوتية'})}catch(e){}}
  nativeInit();nativeMeta(t.name);
 }
-/* controls from lock screen / notification / headset */
 (function(){
  if(!('mediaSession' in navigator))return;var ms=navigator.mediaSession;
- function h(a,f){try{ms.setActionHandler(a,f)}catch(e){}}
- h('play',function(){au.play()});h('pause',function(){au.pause()});
- h('nexttrack',next);h('previoustrack',prev);
- h('seekbackward',function(d){au.currentTime=Math.max(0,au.currentTime-((d&&d.seekOffset)||10))});
- h('seekforward',function(d){au.currentTime=Math.min(au.duration||0,au.currentTime+((d&&d.seekOffset)||10))});
- h('seekto',function(d){if(d&&isFinite(d.seekTime))au.currentTime=d.seekTime});
+ function hh(a,f){try{ms.setActionHandler(a,f)}catch(e){}}
+ hh('play',function(){au.play()});hh('pause',function(){au.pause()});
+ hh('nexttrack',next);hh('previoustrack',prev);
+ hh('seekbackward',function(d){au.currentTime=Math.max(0,au.currentTime-((d&&d.seekOffset)||10))});
+ hh('seekforward',function(d){au.currentTime=Math.min(au.duration||0,au.currentTime+((d&&d.seekOffset)||10))});
+ hh('seekto',function(d){if(d&&isFinite(d.seekTime))au.currentTime=d.seekTime});
 })();
 nativeInit();
 var lastPos=0;
@@ -226,15 +458,49 @@ function next(){if(!queue.length)return;idx=(idx+1)%queue.length;start()}
 function prev(){if(!queue.length)return;if(au.currentTime>3){au.currentTime=0;return}idx=(idx-1+queue.length)%queue.length;start()}
 $('#next').onclick=next;$('#prev').onclick=prev;
 $('#pp').onclick=function(){if(idx<0){var l=visible();if(l.length)playList(l,0);return}au.paused?au.play():au.pause()};
-au.onplay=au.onpause=function(){if('mediaSession' in navigator)navigator.mediaSession.playbackState=au.paused?'paused':'playing';nativeState();$('#pp').textContent=au.paused?'▶':'⏸';$('#pp').setAttribute('aria-label',au.paused?'تشغيل':'إيقاف مؤقت');render()};
+au.onplay=au.onpause=function(){if('mediaSession' in navigator)navigator.mediaSession.playbackState=au.paused?'paused':'playing';nativeState();$('#pp').textContent=au.paused?'▶':'⏸';$('#pp').setAttribute('aria-label',au.paused?'تشغيل':'إيقاف مؤقت');if(tab==='files')renderFiles()};
 au.onended=next;
 au.ontimeupdate=function(){updatePos();$('#cur').textContent=fmt(au.currentTime);$('#dur').textContent=fmt(au.duration);if(au.duration)$('#seek').value=au.currentTime/au.duration*100};
 $('#seek').oninput=function(e){if(au.duration)au.currentTime=e.target.value/100*au.duration};
 
+/* keep content clear of the fixed player + nav */
+function fit(){var n=$('#nav').offsetHeight,p=$('#player').offsetHeight;$('#player').style.bottom=n+'px';document.body.style.paddingBottom=(n+p+16)+'px'}
+if(window.ResizeObserver){var ro=new ResizeObserver(fit);ro.observe($('#player'));ro.observe($('#nav'))}
+au.addEventListener('loadedmetadata',fit);fit();
+
 (async function(){
- try{db=await openDB();if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();await load();}
- catch(e){$('#note').textContent='هذا المتصفح لا يسمح بحفظ الملفات. جرّب فتح الصفحة في Chrome أو Safari مباشرة.';render();}
+ try{
+  db=await openDB();if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+  await load();
+  var stale=downloads.filter(function(d){return d.status==='running'&&!active[d.id]});
+  if(stale.length){await run('downloads','readwrite',function(s){stale.forEach(function(d){d.status='failed';d.error='انقطع التحميل';s.put(d)})});await load()}
+ }catch(e){note('هذا المتصفح لا يسمح بحفظ الملفات. جرّب فتح الصفحة في Chrome أو Safari مباشرة.');render();}
+ initBrowserEvents();
 })();
+/* ---------- app lock ---------- */
+async function hashPw(pw,salt){
+ try{var d=new TextEncoder().encode(salt+':'+pw);var b=await crypto.subtle.digest('SHA-256',d);return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}
+ catch(e){var x=5381,t=salt+':'+pw;for(var i=0;i<t.length;i++)x=((x<<5)+x+t.charCodeAt(i))|0;return 'f'+x}}
+async function bioAvailable(){if(!Capacitor.isNativePlatform())return false;try{var r=await BiometricAuth.checkBiometry();return !!r.isAvailable}catch(e){return false}}
+async function bioAuth(reason){try{await BiometricAuth.authenticate({reason:reason||'افتح التطبيق',cancelTitle:'إلغاء',allowDeviceCredential:false,androidTitle:'مكتبتي الصوتية',androidSubtitle:reason||''});return true}catch(e){return false}}
+function askNewPw(){var a,b;return ask('كلمة مرور جديدة',function(box){
+ box.appendChild(h('label','lb','كلمة المرور (4 أحرف على الأقل)'));a=h('input','inp ltr');a.type='password';box.appendChild(a);
+ box.appendChild(h('label','lb','أعد كتابتها'));b=h('input','inp ltr');b.type='password';box.appendChild(b);return a},
+ function(){if(a.value.length<4||a.value!==b.value){note('كلمتا المرور غير متطابقتين أو أقصر من 4 أحرف.');return null}return a.value})}
+async function verifyPw(){var i;var pw=await ask('أدخل كلمة المرور الحالية',function(box){i=h('input','inp ltr');i.type='password';box.appendChild(i);return i},function(){return i.value},'تأكيد');
+ if(pw===null)return false;
+ if(await hashPw(pw,S.pwSalt)===S.pwHash)return true;
+ note('كلمة المرور غير صحيحة.');return false}
+function showLock(){$('#lock').hidden=false;$('#lpw').value='';$('#lerr').textContent='';$('#lbio').hidden=!S.bio;if(S.bio)tryBio()}
+function unlock(){$('#lock').hidden=true;$('#lpw').value=''}
+async function tryBio(){if(await bioAuth('افتح التطبيق'))unlock()}
+async function tryPw(){var pw=$('#lpw').value;if(!pw)return;
+ if(await hashPw(pw,S.pwSalt)===S.pwHash)unlock();else{$('#lerr').textContent='كلمة المرور غير صحيحة';$('#lpw').value=''}}
+$('#lgo').onclick=tryPw;$('#lbio').onclick=tryBio;
+$('#lpw').onkeydown=function(e){if(e.key==='Enter')tryPw()};
+if(S.lock&&S.pwHash)showLock();
+
+setTab('browse');
 </script>
 </body>
 </html>

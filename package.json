@@ -2,13 +2,19 @@
   "name": "audiolib",
   "version": "1.0.0",
   "private": true,
-  "scripts": { "build": "vite build" },
+  "scripts": {
+    "build": "vite build"
+  },
   "dependencies": {
     "@capacitor/android": "^6.1.2",
     "@capacitor/cli": "^6.1.2",
     "@capacitor/core": "^6.1.2",
     "@capacitor/local-notifications": "^6.1.0",
-    "@jofr/capacitor-media-session": "latest"
+    "@jofr/capacitor-media-session": "latest",
+    "@capgo/inappbrowser": "^6.0.0",
+    "@aparajita/capacitor-biometric-auth": "^8.0.2"
   },
-  "devDependencies": { "vite": "^5.4.0" }
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
 }
