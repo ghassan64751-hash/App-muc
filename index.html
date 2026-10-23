@@ -206,7 +206,7 @@ function start(){
  if(objUrl)URL.revokeObjectURL(objUrl);objUrl=URL.createObjectURL(t.blob);au.src=objUrl;au.play().catch(function(){});
  $('#title').textContent=t.name;
  if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:t.name,artist:'مكتبتي الصوتية'})}catch(e){}}
- nativeMeta(t.name);
+ nativeInit();nativeMeta(t.name);
 }
 /* controls from lock screen / notification / headset */
 (function(){
@@ -221,6 +221,7 @@ function start(){
 nativeInit();
 var lastPos=0;
 function updatePos(){if(!('mediaSession' in navigator)||!isFinite(au.duration)||!au.duration)return;var n=Date.now();if(n-lastPos<1000)return;lastPos=n;try{navigator.mediaSession.setPositionState({duration:au.duration,playbackRate:au.playbackRate,position:Math.min(au.currentTime,au.duration)})}catch(e){}nativePos()}
+['loadedmetadata','seeked','play','pause'].forEach(function(ev){au.addEventListener(ev,function(){lastPos=0;updatePos()})});
 function next(){if(!queue.length)return;idx=(idx+1)%queue.length;start()}
 function prev(){if(!queue.length)return;if(au.currentTime>3){au.currentTime=0;return}idx=(idx-1+queue.length)%queue.length;start()}
 $('#next').onclick=next;$('#prev').onclick=prev;
